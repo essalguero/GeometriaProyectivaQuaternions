@@ -31,6 +31,11 @@ typedef struct {
     float m[16];
 } MATRIX4;
 
+typedef struct {
+	float s;
+	VECTOR3D v;
+} QUATERNION;
+
 static const COLOUR grey = {0.7,0.7,0.7};
 static const COLOUR red = {1,0,0};
 static const COLOUR green = {0,1,0};
@@ -62,5 +67,11 @@ VECTOR3D Transform (MATRIX3 m, VECTOR3D a);
 //
 MATRIX4 InverseOrthogonalMatrix(MATRIX3 A, VECTOR3D t);
 
+
+QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis);
+QUATERNION QuaternionFromToVectors(VECTOR3D from, VECTOR3D to);
+QUATERNION Multiply(QUATERNION a, QUATERNION b);
+QUATERNION Conjugate(QUATERNION a);
+VECTOR3D RotateWithQuaternion(VECTOR3D a, QUATERNION q);
 
 #endif

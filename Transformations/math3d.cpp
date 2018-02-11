@@ -174,3 +174,28 @@ MATRIX4 InverseOrthogonalMatrix(MATRIX3 A, VECTOR3D t)
 	
 	return ret;
 }
+
+QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis)
+{
+
+}
+
+/*QUATERNION QuaternionFromToVectors(VECTOR3D from, VECTOR3D to)
+{
+
+}
+
+QUATERNION Multiply(QUATERNION a, QUATERNION b)
+{
+
+}
+
+QUATERNION Conjugate(QUATERNION a)
+{
+
+}
+
+VECTOR3D RotateWithQuaternion(VECTOR3D a, QUATERNION q)
+{
+
+}*/

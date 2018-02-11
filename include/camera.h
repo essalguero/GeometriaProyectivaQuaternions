@@ -29,4 +29,12 @@ FRUSTUM makeFrustum(double fovX, double aspectRatio, double nearValue, double fa
 MATRIX4 lookAt(VECTOR3D eyePosition, VECTOR3D target, VECTOR3D upVector);
 
 
+typedef struct {
+	float yaw; // Rotation around the Y axis.
+	float pitch; // Rotation around the X axis.
+	float roll; // Rotation around the Z axis.
+	QUATERNION orientation; // Cached quaternion equivalent of this euler object.
+} EULER;
+
+
 #endif
