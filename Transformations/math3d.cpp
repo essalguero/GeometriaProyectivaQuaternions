@@ -1,4 +1,4 @@
-#include "math3d.h"
+﻿#include "math3d.h"
 
 #include <math.h>
 
@@ -42,7 +42,7 @@ double Magnitude(VECTOR3D a)
 {
 	double valor = 0;
 
-	valor = sqrt( (a.x * a.x) + (a.y * a.y) + (a.z * a.z) );
+	valor = sqrt((a.x * a.x) + (a.y * a.y) + (a.z * a.z));
 
 	return valor;
 }
@@ -65,7 +65,7 @@ VECTOR3D CrossProduct(VECTOR3D a, VECTOR3D b) {
 	VECTOR3D ret;
 
 	ret.x = (a.y * b.z) - (b.y * a.z);
-	ret.y = - ( (a.x * b.z) - (b.x * a.z) );
+	ret.y = -((a.x * b.z) - (b.x * a.z));
 	ret.z = (a.x * b.y) - (b.x * a.y);
 
 	return ret;
@@ -140,62 +140,182 @@ MATRIX4 InverseOrthogonalMatrix(MATRIX3 A, VECTOR3D t)
 	ret.m[11] = 0;
 
 
-	ret.m[12] = - DotProduct(t, A.column0);
-	ret.m[13] = - DotProduct(t, A.column1);
-	ret.m[14] = - DotProduct(t, A.column2);
-		
+	ret.m[12] = -DotProduct(t, A.column0);
+	ret.m[13] = -DotProduct(t, A.column1);
+	ret.m[14] = -DotProduct(t, A.column2);
+
 	ret.m[15] = 1;
 
 
 	/*ret.m[0] = A.column0.x;
 	ret.m[1] = A.column0.y;
 	ret.m[2] = A.column0.z;
-
 	ret.m[3] = 0;
-
 	ret.m[4] = A.column0.x;
 	ret.m[5] = A.column0.y;
 	ret.m[6] = A.column0.z;
-
 	ret.m[7] = 0;
-
 	ret.m[8] = A.column0.x;
 	ret.m[9] = A.column0.y;
 	ret.m[10] = A.column0.z;
-
 	ret.m[11] = 0;
-
-
 	ret.m[12] = -DotProduct(t, A.column0);
 	ret.m[13] = -DotProduct(t, A.column1);
 	ret.m[14] = -DotProduct(t, A.column2);
-
 	ret.m[15] = 1;*/
-	
+
 	return ret;
 }
 
 QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis)
 {
+	VECTOR3D vectorUnitario;
 
+	QUATERNION rotor;
+
+	vectorUnitario = Normalize(axis);
+
+	float coseno = cos(angle / 2);
+	float seno = sin(angle / 2);
+
+	rotor.s = coseno;
+	rotor.v = MultiplyWithScalar(-seno, vectorUnitario);
+
+	return rotor;
 }
 
-/*QUATERNION QuaternionFromToVectors(VECTOR3D from, VECTOR3D to)
+QUATERNION QuaternionFromToVectors(VECTOR3D from, VECTOR3D to)
 {
+	QUATERNION fromQuaternion;
+	QUATERNION toQuaternion;
+	QUATERNION ret;
 
+	VECTOR3D fromNormalized;
+	VECTOR3D toNormalized;
+
+	double cosenoAngulo;
+	double angulo;
+
+	// Se utiliza para interpolar el quaternion en la mitad del angulo formado;
+	// Por eso se inicializa a 0.5
+	double factor = 0.5;
+
+
+	fromNormalized = Normalize(from);
+	toNormalized = Normalize(to);
+
+	// A . B = ||A|| ||B|| cos(Angulo)
+	cosenoAngulo = DotProduct(from, to);
+
+	angulo = acos(cosenoAngulo);
+
+	fromQuaternion = Vector3DToQuaternion(fromNormalized);
+	toQuaternion = Vector3DToQuaternion(toNormalized);
+
+	ret = SLERP_Quaternion(fromQuaternion, toQuaternion, factor, angulo);
+
+	return ret;
 }
 
+// Multiplicar dos QUATERNIONs
 QUATERNION Multiply(QUATERNION a, QUATERNION b)
 {
+	QUATERNION ret;
+	VECTOR3D v1, v2, vCross;
+
+	// Obtener escalar del nuevo QUATERNION
+	ret.s = (a.s * b.s) - DotProduct(a.v, b.v);
+
+	// Vectores intermedios para calcular la parte Vectorial del nuevo QUATERNION
+	v1 = MultiplyWithScalar(a.s, b.v);
+	v2 = MultiplyWithScalar(b.s, a.v);
+	vCross = Multiply(a.v, b.v);
+
+	// Calcular el Vector3d del nuevo QUATERNION
+	ret.v = Add(v1, v2);
+	ret.v = Add(ret.v, vCross);
+
+	
+
+	ret.s = (a.s * b.s) - (a.v.x  * b.v.x) - (a.v.y * b.v.y) - (a.v.z * b.v.z);
+	ret.v.x = a.s * b.v.x + a.v.x * b.s + a.v.y * b.v.z - a.v.z * b.v.y;
+	ret.v.y = a.s * b.v.y - a.v.x * b.v.z + a.v.y * b.s + a.v.z * b.v.x;
+	ret.v.z = a.s * b.v.z + a.v.x * b.v.y - a.v.y * b.v.x + a.v.z * b.s;
+
+
+	return ret;
 
 }
 
+// Invertir el signo de la parte vectorial del QUATERNION
 QUATERNION Conjugate(QUATERNION a)
 {
+	QUATERNION aConjugado;
+	aConjugado.s = a.s;
+	aConjugado.v = MultiplyWithScalar(-1.0, a.v);
+
+	return aConjugado;
+}
+
+// Asumir que q es un Quaternion con un vector unitario? Es un rotor?
+VECTOR3D RotateWithQuaternion(VECTOR3D a, QUATERNION q)
+{
+	QUATERNION aQuaternion;
+	QUATERNION aQuaternionRotado;
+	QUATERNION qInvertido;
+
+	aQuaternion.s = 0;
+	aQuaternion.v = a;
+
+	qInvertido = Conjugate(q);
+
+	aQuaternionRotado = Multiply(Multiply(q, aQuaternion), qInvertido);
+
+	return aQuaternionRotado.v;
 
 }
 
-VECTOR3D RotateWithQuaternion(VECTOR3D a, QUATERNION q)
+QUATERNION MultiplyByScalar(float scalar, QUATERNION q)
 {
+	QUATERNION ret;
 
-}*/
+	ret.s = scalar * q.s;
+	ret.v = MultiplyWithScalar(scalar, q.v);
+
+	return ret;
+}
+
+QUATERNION AddQuaternions(QUATERNION q1, QUATERNION q2)
+{
+	QUATERNION ret;
+	ret.s = q1.s + q2.s;
+	ret.v = Add(q1.v, q2.v);
+
+	return ret;
+}
+
+QUATERNION Vector3DToQuaternion(VECTOR3D v)
+{
+	QUATERNION ret;
+
+	ret.s = 0;
+	ret.v = v;
+
+	return ret;
+}
+
+
+QUATERNION SLERP_Quaternion(QUATERNION q1, QUATERNION q2, float t, double angulo)
+{
+	QUATERNION ret;
+	QUATERNION step1;
+	QUATERNION step2;
+
+	step1 = MultiplyByScalar(sin((1 - t) * angulo) / sin(angulo), q1);
+
+	step2 = MultiplyByScalar(sin(t * angulo) / sin(angulo), q2);
+
+	ret = AddQuaternions(step1, step2);
+
+	return ret;
+}

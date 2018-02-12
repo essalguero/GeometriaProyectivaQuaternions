@@ -8,6 +8,8 @@
 #include "camera.h"
 #include "shapes.h"
 
+#include "math3d.h"
+
 void Display(void);
 void Init(void);
 void Render(void);
@@ -31,6 +33,58 @@ FRUSTUM centerFrustum;
 double rotateangle = 0;
 
 
+void testMultiply() {
+	VECTOR3D v1{ 1, 0, 0 };
+	VECTOR3D v2{ 0, 1, 0 };
+	VECTOR3D v3{ 0, 0, 1 };
+
+	/*v1.x = 1;
+	v1.y = 0;
+	v1.z = 0;*/
+
+	QUATERNION q1 = Vector3DToQuaternion(v1);
+
+	/*v2.x = 0;
+	v2.y = 1;
+	v2.z = 0;*/
+
+	QUATERNION q2 = Vector3DToQuaternion(v2);
+
+	/*v3.x = 0;
+	v3.y = 0;
+	v3.z = 1;*/
+
+	QUATERNION q3 = Vector3DToQuaternion(v3);
+
+	QUATERNION q4;
+	q4.s = -3;
+	q4.v = { 6, 7, -8 };
+
+
+	QUATERNION q5;
+	q5.s = 1;
+	q5.v = { 12, -7, -11 };
+
+
+	QUATERNION result01 = Multiply(q1, q2);
+	QUATERNION result02 = Multiply(q1, q3);
+	QUATERNION result03 = Multiply(q3, q3);
+	QUATERNION result04 = Multiply(q4, q5);
+
+	QUATERNION q1Conjugado = Conjugate(q1);
+	QUATERNION multConjugado01 = Multiply(q1, q1Conjugado);
+
+	QUATERNION q5Conjugado = Conjugate(q5);
+	QUATERNION multConjugado05 = Multiply(q5, q5Conjugado);
+
+	return;
+}
+
+void test()
+{
+	testMultiply();
+}
+
 int main(int argc,char **argv)
 {
     camera.screenwidth = 600;
@@ -51,6 +105,17 @@ int main(int argc,char **argv)
     InitCamera(0);
     Lighting();
     
+
+	/*
+	
+	
+	
+	*/
+
+
+	test();
+
+
 	glutMainLoop();
     return(0);
 }
