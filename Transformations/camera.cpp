@@ -2,6 +2,11 @@
 
 #include <math.h>
 
+int xPrev, yPrev;
+
+extern CAMERA camera;
+
+using namespace std;
 // TODO
 // devuelve los valores de distancia de los planos a partir del fov horizontal
 FRUSTUM makeFrustum(double fovX, double aspectRatio, double nearValue, double farValue)
@@ -55,4 +60,63 @@ MATRIX4 lookAt(VECTOR3D eyePosition, VECTOR3D target, VECTOR3D upVector)
 	m4 = InverseOrthogonalMatrix(mRot, eyePosition);
 
 	return m4;
+}
+
+
+//En la siguiente función (uptadeEulerOrientation): utilizando los valores yaw, pitch, roll, y las
+//funciones anteriores QuaternionFromAngleAxis y Multiply (cuaternio), actualiza la estructura EULER
+//encadenando tres giros en los tres ejes X, Y y Z.
+void updateEulerOrientation(EULER& euler)
+{
+	
+	QUATERNION qPitch = QuaternionFromAngleAxis(euler.pitch, camera.up);
+
+	VECTOR3D vectorYaw = CrossProduct(camera.up, camera.direction);
+
+	QUATERNION qYaw = QuaternionFromAngleAxis(euler.yaw, vectorYaw);
+
+	QUATERNION rotation = Multiply(qPitch, qYaw);
+	
+	euler.orientation = rotation;
+
+	camera.up = RotateWithQuaternion(camera.up, qYaw);
+}
+
+//En la siguiente función (getForward): obtén un vector forward a partir del vector -Z, transformando
+//dicho vector con la orientación obtenida en la función anterior.
+VECTOR3D getForward(EULER euler)
+{
+	VECTOR3D ret;
+
+	return ret;
+}
+
+//Para controlar la cámara tienes que obtener los cambios de posición del ratón y transformarlos
+//en ejes EULER (yaw y pitch). La cámara debe mirar guiada por el ratón. Utiliza para ello las
+//siguientes funciones de GLUT:
+void HandleMouseMotion(int x, int y)\
+{
+	cout << "Active -> x: " << x << "\ty: " << y << endl;
+
+
+
+	EULER rotacionEuler;
+	rotacionEuler.yaw = (y - yPrev) / 100;
+	rotacionEuler.pitch = (x - xPrev) / 100;
+
+	updateEulerOrientation(rotacionEuler);
+
+}
+
+void HandleMousePassiveMotion(int x, int y)
+{
+	//cout << "Pasive -> x: " << x << "\ty: " << y << endl;
+
+
+	xPrev = x;
+	yPrev = y;
+
+
+	
+	
 }

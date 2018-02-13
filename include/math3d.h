@@ -77,4 +77,5 @@ VECTOR3D RotateWithQuaternion(VECTOR3D a, QUATERNION q);
 QUATERNION Vector3DToQuaternion(VECTOR3D v);
 QUATERNION SLERP_Quaternion(QUATERNION q1, QUATERNION q2, float t, double angulo);
 
+
 #endif

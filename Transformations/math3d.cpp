@@ -167,9 +167,12 @@ MATRIX4 InverseOrthogonalMatrix(MATRIX3 A, VECTOR3D t)
 	return ret;
 }
 
+// Rotar respecto un vector director un angulo en degrees.
+
+// Devolver un rotor con vector unitario
 QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis)
 {
-	VECTOR3D vectorUnitario;
+	/*VECTOR3D vectorUnitario;
 
 	QUATERNION rotor;
 
@@ -181,9 +184,36 @@ QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis)
 	rotor.s = coseno;
 	rotor.v = MultiplyWithScalar(-seno, vectorUnitario);
 
-	return rotor;
+	return rotor;*/
+
+
+	/*Supongamos que quiero rotar un vector v = (v_0, v_1, v_2) un angulo \theta alrededor de un eje b = (b_0, b_1, b_2). Construimos dos quaternions usando el vector b y el angulo \theta:
+
+	Q = \cos(\theta/2) + \sin(\theta/2) \ ( i b_0 + j b_1 + k b_2 )
+
+	Q^{-1} = \cos(\theta/2) - \sin(\theta/2) \ ( i b_0 + j b_1 + k b_2 )
+
+	Y aplicamos el producto tipo sandwitch:
+
+	v' = Q \ v \ Q^{-1}
+
+	El vector v' es la rotaciÃ³n del vector v un angulo \theta alrededor de un eje b.
+	*/
+
+	double anguloRadianes = DTOR * angle;
+
+	QUATERNION ret;
+
+	ret.s = cos(anguloRadianes / 2);
+	ret.v = MultiplyWithScalar(sin(anguloRadianes / 2), Normalize(axis));
+
+	return ret;
+
 }
 
+// Cuaternio necesario para transformar el vector From en el Vector To
+// Las normas de los vectores pueden ser distintas?
+//Sip, serÃ­a el cuaternion de rotaciÃ³n, asÃ­ que las normas deberÃ­an darte igual. No tienes que escalarlos, solo rotar de uno a otro.
 QUATERNION QuaternionFromToVectors(VECTOR3D from, VECTOR3D to)
 {
 	QUATERNION fromQuaternion;
@@ -223,28 +253,40 @@ QUATERNION Multiply(QUATERNION a, QUATERNION b)
 	QUATERNION ret;
 	VECTOR3D v1, v2, vCross;
 
+	// Factor de tolerancia utilizado para redondear
+	float tolerancia = 0.000001;
+
 	// Obtener escalar del nuevo QUATERNION
 	ret.s = (a.s * b.s) - DotProduct(a.v, b.v);
 
 	// Vectores intermedios para calcular la parte Vectorial del nuevo QUATERNION
 	v1 = MultiplyWithScalar(a.s, b.v);
 	v2 = MultiplyWithScalar(b.s, a.v);
-	vCross = Multiply(a.v, b.v);
+	vCross = CrossProduct(a.v, b.v);
 
 	// Calcular el Vector3d del nuevo QUATERNION
 	ret.v = Add(v1, v2);
 	ret.v = Add(ret.v, vCross);
 
-	
 
-	ret.s = (a.s * b.s) - (a.v.x  * b.v.x) - (a.v.y * b.v.y) - (a.v.z * b.v.z);
-	ret.v.x = a.s * b.v.x + a.v.x * b.s + a.v.y * b.v.z - a.v.z * b.v.y;
-	ret.v.y = a.s * b.v.y - a.v.x * b.v.z + a.v.y * b.s + a.v.z * b.v.x;
-	ret.v.z = a.s * b.v.z + a.v.x * b.v.y - a.v.y * b.v.x + a.v.z * b.s;
+	// AÃ±adido para evitar problemas de redondeos en las rotaciones
+	double xRounded = round(ret.v.x);
+	double yRounded = round(ret.v.y);
+	double zRounded = round(ret.v.z);
+
+	
+	if ((fabs(ret.v.x - xRounded) < tolerancia) || (fabs(ret.v.x - xRounded) > (1 - tolerancia)))
+		ret.v.x = xRounded;
+
+	if ((fabs(ret.v.y - yRounded) < tolerancia) || (fabs(ret.v.y - yRounded) > (1 - tolerancia)))
+		ret.v.y = yRounded;
+
+	if ((fabs(ret.v.z - zRounded) < tolerancia) || (fabs(ret.v.z - zRounded) > (1 - tolerancia)))
+		ret.v.z = zRounded;
+
 
 
 	return ret;
-
 }
 
 // Invertir el signo de la parte vectorial del QUATERNION
@@ -257,21 +299,38 @@ QUATERNION Conjugate(QUATERNION a)
 	return aConjugado;
 }
 
-// Asumir que q es un Quaternion con un vector unitario? Es un rotor?
+//A es un punto que es rotado por el quaterion Q
 VECTOR3D RotateWithQuaternion(VECTOR3D a, QUATERNION q)
 {
 	QUATERNION aQuaternion;
 	QUATERNION aQuaternionRotado;
-	QUATERNION qInvertido;
+	QUATERNION qConjugado;
 
-	aQuaternion.s = 0;
-	aQuaternion.v = a;
+	aQuaternion = Vector3DToQuaternion(a);
 
-	qInvertido = Conjugate(q);
+	qConjugado = Conjugate(q);
 
-	aQuaternionRotado = Multiply(Multiply(q, aQuaternion), qInvertido);
+	aQuaternionRotado = Multiply(q, Multiply(aQuaternion, qConjugado));
 
 	return aQuaternionRotado.v;
+
+
+	// Metodo alternativo para rotar el vector a con el quaternion q
+	// Parece funcionar correctamente, pero ttiene problemas de redondeo
+	/*t = 2 * cross(q.xyz, v)
+	v' = v + q.w * t + cross(q.xyz, t)*/
+
+	/*VECTOR3D interm = CrossProduct(q.v, a);
+
+	VECTOR3D interm2 = MultiplyWithScalar(2, interm);
+
+	VECTOR3D interm3 = MultiplyWithScalar(q.s, interm2);
+	VECTOR3D interm4 = CrossProduct(q.v, interm2);
+
+	VECTOR3D interm5 = Add(interm3, interm4);
+	VECTOR3D ret = Add(a, interm5);
+
+	return ret;*/
 
 }
 
@@ -310,6 +369,8 @@ QUATERNION SLERP_Quaternion(QUATERNION q1, QUATERNION q2, float t, double angulo
 	QUATERNION ret;
 	QUATERNION step1;
 	QUATERNION step2;
+
+
 
 	step1 = MultiplyByScalar(sin((1 - t) * angulo) / sin(angulo), q1);
 
