@@ -34,6 +34,11 @@ FRUSTUM centerFrustum;
 double rotateangle = 0;
 
 
+int xPrev = INT_MIN;
+int yPrev = INT_MIN;
+
+EULER rotacionEuler;
+
 void testMultiply() {
 	VECTOR3D v1{ 1, 0, 0 };
 	VECTOR3D v2{ 0, 1, 0 };
@@ -151,7 +156,7 @@ int main(int argc, char **argv)
 	glutPassiveMotionFunc(HandleMousePassiveMotion);
 
 	/*
-	Funciones de test añadidas para comprobar que las funciones pedidas estan
+	Funciones de test aÃ±adidas para comprobar que las funciones pedidas estan
 	implementadas correctamente
 	*/
 
@@ -217,6 +222,11 @@ void Display(void)
 
 	Render();
 
+	//cout << "Display: camera.direction.x: " << camera.direction.x << " camera.direction.y: " << camera.direction.y << " camera.direction.z: " << camera.direction.z << endl;
+	//cout << "Display: camera.position.x: " << camera.position.x << " camera.position.y: " << camera.position.y << " camera.position.z: " << camera.position.z << endl;
+	//cout << "Display: target.x: " << target.x << " target.y: " << target.y << " target.z: " << target.z << endl << endl;
+	//cout << "Euler: euler.yaw: " << rotacionEuler.yaw << " euler.pitch: " << rotacionEuler.pitch << " euler.roll: " << rotacionEuler.roll << endl << endl << endl;
+
 	glutSwapBuffers();
 }
 
@@ -233,6 +243,8 @@ void Render(void)
 	glRotatef(rotateangle, 0.0, 1.0, 0.0);
 
 	drawAxis();
+
+	drawScene();
 
 	glPopMatrix();
 }
@@ -269,6 +281,10 @@ void Lighting(void)
 
 void HandleKeyboard(unsigned char key, int x, int y)
 {
+	VECTOR3D forwardVector;
+	VECTOR3D upVector;
+	VECTOR3D movingVector;
+
 	switch (key) {
 	case ESC:
 	case 'Q':
@@ -294,7 +310,38 @@ void HandleKeyboard(unsigned char key, int x, int y)
 	case 'H':
 		InitCamera(0);
 		break;
+
+	case 'w':
+	case 'W':
+		forwardVector = getForward(rotacionEuler);
+		camera.position = Add(camera.position, forwardVector);
+		break;
+
+	case 's':
+	case 'S':
+		forwardVector = MultiplyWithScalar(-1, getForward(rotacionEuler));
+		camera.position = Add(camera.position, forwardVector);
+		break;
+
+	case 'a':
+	case 'A':
+		forwardVector = getForward(rotacionEuler);
+		upVector = getUp(rotacionEuler);
+		movingVector = CrossProduct(upVector, forwardVector);
+		camera.position = Add(camera.position, movingVector);
+		break;
+
+	case 'd':
+	case 'D':
+		forwardVector = getForward(rotacionEuler);
+		upVector = getUp(rotacionEuler);
+		movingVector = MultiplyWithScalar(-1, CrossProduct(upVector, forwardVector));
+		camera.position = Add(camera.position, movingVector);
+		break;
+
 	}
+
+
 }
 
 void HandleIdle(void)
@@ -327,4 +374,86 @@ void InitCamera(int mode)
 	camera.up.x = 0;
 	camera.up.y = 1;
 	camera.up.z = 0;
+}
+
+void InitEuler()
+{
+	rotacionEuler.yaw = 0;
+	rotacionEuler.pitch = 0;
+	rotacionEuler.roll = 0;
+
+	rotacionEuler.orientation = { 1, 0, 0, 0 };
+}
+
+//Para controlar la cÃ¡mara tienes que obtener los cambios de posiciÃ³n del ratÃ³n y transformarlos
+//en ejes EULER (yaw y pitch). La cÃ¡mara debe mirar guiada por el ratÃ³n. Utiliza para ello las
+//siguientes funciones de GLUT:
+void HandleMouseMotion(int x, int y)
+{
+	//xPrev e yPrev se inicializan a INT_MIN y se comprueban antes de actualizar los angulos para evitar un salto brusco
+	//al inicializar el programa
+	if (xPrev != INT_MIN && yPrev != INT_MIN)
+	{
+		// Calcular grados de rotacion en funcion de los valores de x e y.
+		// Se hace una resta de los valores antiguos y los nuevos y el resultado se considera
+		// el angulo de rotacion (en grados)
+		rotacionEuler.yaw = (y - yPrev);
+		rotacionEuler.pitch = (x - xPrev);
+		rotacionEuler.roll = 0;
+
+		// Solo se realizan los calculos de los vectores de camara si alguno de los
+		// angulos se ha actualizado
+		if (rotacionEuler.yaw != 0 || rotacionEuler.pitch != 0)
+		{
+			// Actualizar los angulos de rotacion en la estructura
+			updateEulerOrientation(rotacionEuler);
+
+			// Variables declaradas para mejorar la legibilidad del codigo
+			// Contienen los nuevos vectores que hay que utilizar para actualizar la camara
+			//VECTOR3D eyePosition = RotateWithQuaternion(camera.position, rotacionEuler.orientation);
+
+			VECTOR3D eyePosition = RotateWithQuaternion(camera.position, QuaternionFromAngleAxis(rotacionEuler.yaw, { 1, 0, 0 }));
+			eyePosition = RotateWithQuaternion(eyePosition, QuaternionFromAngleAxis(rotacionEuler.pitch, { 0, 1, 0 }));
+			//eyePosition = RotateWithQuaternion(eyePosition, QuaternionFromAngleAxis(rotacionEuler.roll, {0, 0, 1}));
+
+			// No actualizar el vector target (camera.direction), si no siempre gira alrededor de ese punto
+			// en lugar de girar alrededor de la propia camara
+			//VECTOR3D target = RotateWithQuaternion(camera.direction, rotacionEuler.orientation);
+			//VECTOR3D target = RotateWithQuaternion(camera.direction, QuaternionFromAngleAxis(rotacionEuler.yaw, {1, 0, 0}));
+			//target = RotateWithQuaternion(target, QuaternionFromAngleAxis(rotacionEuler.pitch, {0, 1, 0}));
+
+			//VECTOR3D upVector = RotateWithQuaternion(camera.up, rotacionEuler.orientation);
+			VECTOR3D upVector = RotateWithQuaternion(camera.up, QuaternionFromAngleAxis(rotacionEuler.yaw, { 1, 0, 0 }));
+			upVector = RotateWithQuaternion(upVector, QuaternionFromAngleAxis(rotacionEuler.pitch, { 0, 1, 0 }));
+		    //upVector = RotateWithQuaternion(upVector, QuaternionFromAngleAxis(rotacionEuler.roll, {0, 0, 1}));
+
+			//Hay que actualizar los parametros de la camara puesto que son estos los que se utilizan en
+			// la funcion Display (Marcada como funcion de pintado para OpenGL). Si se llamara a lookAt
+			// para actualizar la camara, la matriz generada se sobreescribiria en la siguiente llamada
+			// a display, puesto que display tambien llama a lookAt (pasando los vectores de la camara)
+			//camera.direction = target;
+			camera.position = eyePosition;
+			camera.up = upVector;
+		}
+
+	}
+
+	// Guardar las nuevas coordenadas del raton para utilizarlas en la siguiente llamada a la funcion
+	xPrev = x;
+	yPrev = y;
+
+}
+
+void HandleMousePassiveMotion(int x, int y)
+{
+	//cout << "Pasive -> x: " << x << "\ty: " << y << endl;
+
+
+	//xPrev = x;
+	//yPrev = y;
+
+	// La funcionalidad de esta funcion es la misma que en la funcion HandleMouseMotion
+	// Por este motivo se llama directamente a la funcion
+	HandleMouseMotion(x, y);
+	//glutPostRedisplay();
 }

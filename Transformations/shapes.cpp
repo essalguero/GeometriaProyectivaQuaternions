@@ -2,6 +2,8 @@
 #include "GLInclude.h"
 #include "shapes.h"
 
+#include "math3d.h"
+
 void drawDot(VECTOR3D position, float sradius, COLOUR color)
 {
 	glPushMatrix();
@@ -132,4 +134,151 @@ void drawLine(LINE line, COLOUR color, bool doDrawDots)
 	colorZ.r = 0;
 	colorZ.g = 0;
 	colorZ.b = 1.0;
-	drawLine(lineZ, colorZ, true);}
+	drawLine(lineZ, colorZ, true);}void drawBox(VECTOR3D boxPosition){	glBegin(GL_POLYGON);
+	glColor3f(1.0, 1.0, 0.0);
+
+	VECTOR3D result = Add(boxPosition, { 0.5, -0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { 0.5, 0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, 0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, -0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+
+	glEnd();	// White side - BACK
+	glBegin(GL_POLYGON);
+	glColor3f(1.0, 1.0, 1.0);
+
+	result = Add(boxPosition, { 0.5, -0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { 0.5, 0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, 0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, -0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	glEnd();
+
+	// Purple side - RIGHT
+	glBegin(GL_POLYGON);
+	glColor3f(1.0, 0.0, 1.0);
+	result = Add(boxPosition, { 0.5, -0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { 0.5, 0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { 0.5, 0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { 0.5, -0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	glEnd();
+
+	// Green side - LEFT
+	glBegin(GL_POLYGON);
+	glColor3f(0.0, 1.0, 0.0);
+	result = Add(boxPosition, { -0.5, -0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, 0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, 0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, -0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	glEnd();
+
+	// Blue side - TOP
+	glBegin(GL_POLYGON);
+	glColor3f(0.0, 0.0, 1.0);
+	result = Add(boxPosition, { 0.5, 0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { 0.5, 0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, 0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, 0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	glEnd();
+
+	// Red side - BOTTOM
+	glBegin(GL_POLYGON);
+	glColor3f(1.0, 0.0, 0.0);
+	result = Add(boxPosition, { 0.5, -0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { 0.5, -0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, -0.5, 0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	result = Add(boxPosition, { -0.5, -0.5, -0.5 });
+	glVertex3f(result.x, result.y, result.z);
+	glEnd();}void drawScene(){
+
+	drawBox({ 0, 0, 0 });
+	drawBox({ 20, 0, 20 });
+	drawBox({ -20, 0, 20 });
+	drawBox({ 0, 0, 40 });
+
+
+	drawBox({ 0, 0, -20 });
+
+
+	/*
+	// Definir las lineas de los ejes
+	LINE lineX;
+	LINE lineY;
+	LINE lineZ;
+
+	// Definir los colores de los ejes
+	COLOUR colorX;
+	COLOUR colorY;
+	COLOUR colorZ;
+
+	// Definir los vectores para los ejes
+	VECTOR3D origen, puntoX, puntoY, puntoZ;
+
+	// Punto de origen
+	origen.x = 0.0;
+	origen.y = 0.0;
+	origen.z = 0.0;
+
+	// Vector eje X
+	puntoX.x = 1.0;
+	puntoX.y = 0;
+	puntoX.z = 0;
+
+	lineX.P.push_back(origen);
+	lineX.P.push_back(puntoX);
+
+	colorX.r = 1.0;
+	colorX.g = 0;
+	colorX.b = 0;
+
+	drawLine(lineX, colorX, true);
+
+
+	// Vector eje Y
+	puntoY.x = 0;
+	puntoY.y = 1.0;
+	puntoY.z = 0;
+
+	lineY.P.push_back(origen);
+	lineY.P.push_back(puntoY);
+
+	colorY.r = 0;
+	colorY.g = 1.0;
+	colorY.b = 0;
+
+	drawLine(lineY, colorY, true);
+
+
+	// Vector Eje Z
+	puntoZ.x = 0;
+	puntoZ.y = 0;
+	puntoZ.z = 1.0;
+
+	lineZ.P.push_back(origen);
+	lineZ.P.push_back(puntoZ);
+
+	colorZ.r = 0;
+	colorZ.g = 0;
+	colorZ.b = 1.0;
+	drawLine(lineZ, colorZ, true);*/}

@@ -2,9 +2,9 @@
 
 #include <math.h>
 
-int xPrev, yPrev;
 
 extern CAMERA camera;
+extern EULER rotacionEuler;
 
 using namespace std;
 // TODO
@@ -63,60 +63,77 @@ MATRIX4 lookAt(VECTOR3D eyePosition, VECTOR3D target, VECTOR3D upVector)
 }
 
 
-//En la siguiente función (uptadeEulerOrientation): utilizando los valores yaw, pitch, roll, y las
+//En la siguiente funciÃ³n (uptadeEulerOrientation): utilizando los valores yaw, pitch, roll, y las
 //funciones anteriores QuaternionFromAngleAxis y Multiply (cuaternio), actualiza la estructura EULER
 //encadenando tres giros en los tres ejes X, Y y Z.
 void updateEulerOrientation(EULER& euler)
 {
-	
-	QUATERNION qPitch = QuaternionFromAngleAxis(euler.pitch, camera.up);
+
+
+
+
+	/*QUATERNION qPitch = QuaternionFromAngleAxis(euler.pitch, camera.up);
 
 	VECTOR3D vectorYaw = CrossProduct(camera.up, camera.direction);
 
 	QUATERNION qYaw = QuaternionFromAngleAxis(euler.yaw, vectorYaw);
 
 	QUATERNION rotation = Multiply(qPitch, qYaw);
-	
+
+	euler.orientation = rotation;*/
+
+
+
+
+
+	VECTOR3D ejeY;
+	VECTOR3D ejeX;
+	VECTOR3D ejeZ;
+
+	ejeX = Normalize(CrossProduct(camera.up, camera.direction));
+	ejeY = Normalize(CrossProduct(camera.direction, ejeX));
+	ejeZ = Normalize(camera.direction);
+	QUATERNION rotation;
+
+	QUATERNION qPitch = QuaternionFromAngleAxis(euler.pitch, ejeY);
+
+	QUATERNION qYaw = QuaternionFromAngleAxis(-euler.yaw, ejeX);
+
+	QUATERNION qRoll = QuaternionFromAngleAxis(euler.roll, ejeZ);
+
+	rotation = Multiply(qPitch, qYaw);
+
+
+	/*camera.direction = RotateWithQuaternion(camera.direction, rotation);
+	camera.position = RotateWithQuaternion(camera.position, rotation);
+	camera.up = RotateWithQuaternion(camera.up, rotation);*/
+
 	euler.orientation = rotation;
 
-	camera.up = RotateWithQuaternion(camera.up, qYaw);
+	/*cout << "camera.direction.x: " << camera.direction.x << " - camera.direction.y: " << camera.direction.y << " - camera.direction.z: " << camera.direction.z << endl;*/
+
+
+
+
 }
 
-//En la siguiente función (getForward): obtén un vector forward a partir del vector -Z, transformando
-//dicho vector con la orientación obtenida en la función anterior.
+VECTOR3D getUp(EULER euler)
+{
+	VECTOR3D ret;
+
+	//ret = RotateWithQuaternion({0, 0, -1}, euler.orientation);
+	ret = Normalize(camera.up);
+	return ret;
+}
+
+//En la siguiente funciÃ³n (getForward): obtÃ©n un vector forward a partir del vector -Z, transformando
+//dicho vector con la orientaciÃ³n obtenida en la funciÃ³n anterior.
 VECTOR3D getForward(EULER euler)
 {
 	VECTOR3D ret;
 
+	//ret = RotateWithQuaternion({0, 0, -1}, euler.orientation);
+	ret = Normalize(camera.direction);
 	return ret;
 }
 
-//Para controlar la cámara tienes que obtener los cambios de posición del ratón y transformarlos
-//en ejes EULER (yaw y pitch). La cámara debe mirar guiada por el ratón. Utiliza para ello las
-//siguientes funciones de GLUT:
-void HandleMouseMotion(int x, int y)\
-{
-	cout << "Active -> x: " << x << "\ty: " << y << endl;
-
-
-
-	EULER rotacionEuler;
-	rotacionEuler.yaw = (y - yPrev) / 100;
-	rotacionEuler.pitch = (x - xPrev) / 100;
-
-	updateEulerOrientation(rotacionEuler);
-
-}
-
-void HandleMousePassiveMotion(int x, int y)
-{
-	//cout << "Pasive -> x: " << x << "\ty: " << y << endl;
-
-
-	xPrev = x;
-	yPrev = y;
-
-
-	
-	
-}

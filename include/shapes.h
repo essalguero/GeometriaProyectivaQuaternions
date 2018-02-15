@@ -20,5 +20,10 @@ void drawAxis();
 
 
 
+void drawBox(VECTOR3D boxPosition);
+void drawScene();
+
+
+
 
 #endif

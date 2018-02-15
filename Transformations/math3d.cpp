@@ -172,42 +172,19 @@ MATRIX4 InverseOrthogonalMatrix(MATRIX3 A, VECTOR3D t)
 // Devolver un rotor con vector unitario
 QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis)
 {
-	/*VECTOR3D vectorUnitario;
+	VECTOR3D vectorUnitario = Normalize(axis);
 
 	QUATERNION rotor;
-
+	double anguloRadianes = DTOR * angle;
 	vectorUnitario = Normalize(axis);
 
-	float coseno = cos(angle / 2);
-	float seno = sin(angle / 2);
+	float coseno = cos(anguloRadianes / 2);
+	float seno = sin(anguloRadianes / 2);
 
 	rotor.s = coseno;
 	rotor.v = MultiplyWithScalar(-seno, vectorUnitario);
 
-	return rotor;*/
-
-
-	/*Supongamos que quiero rotar un vector v = (v_0, v_1, v_2) un angulo \theta alrededor de un eje b = (b_0, b_1, b_2). Construimos dos quaternions usando el vector b y el angulo \theta:
-
-	Q = \cos(\theta/2) + \sin(\theta/2) \ ( i b_0 + j b_1 + k b_2 )
-
-	Q^{-1} = \cos(\theta/2) - \sin(\theta/2) \ ( i b_0 + j b_1 + k b_2 )
-
-	Y aplicamos el producto tipo sandwitch:
-
-	v' = Q \ v \ Q^{-1}
-
-	El vector v' es la rotaciÃ³n del vector v un angulo \theta alrededor de un eje b.
-	*/
-
-	double anguloRadianes = DTOR * angle;
-
-	QUATERNION ret;
-
-	ret.s = cos(anguloRadianes / 2);
-	ret.v = MultiplyWithScalar(sin(anguloRadianes / 2), Normalize(axis));
-
-	return ret;
+	return rotor;
 
 }
 
@@ -270,19 +247,18 @@ QUATERNION Multiply(QUATERNION a, QUATERNION b)
 
 
 	// AÃ±adido para evitar problemas de redondeos en las rotaciones
-	double xRounded = round(ret.v.x);
+	/*double xRounded = round(ret.v.x);
 	double yRounded = round(ret.v.y);
 	double zRounded = round(ret.v.z);
 
-	
-	if ((fabs(ret.v.x - xRounded) < tolerancia) || (fabs(ret.v.x - xRounded) > (1 - tolerancia)))
-		ret.v.x = xRounded;
+	if ( (abs(ret.v.x - xRounded) < tolerancia) || (abs(ret.v.x - xRounded) > (1 - tolerancia)) )
+	ret.v.x = xRounded;
 
-	if ((fabs(ret.v.y - yRounded) < tolerancia) || (fabs(ret.v.y - yRounded) > (1 - tolerancia)))
-		ret.v.y = yRounded;
+	if ( (abs(ret.v.y - yRounded) < tolerancia) || (abs(ret.v.y - yRounded) > (1 - tolerancia)) )
+	ret.v.y = yRounded;
 
-	if ((fabs(ret.v.z - zRounded) < tolerancia) || (fabs(ret.v.z - zRounded) > (1 - tolerancia)))
-		ret.v.z = zRounded;
+	if ( (abs(ret.v.z - zRounded) < tolerancia) || (abs(ret.v.z - zRounded) > (1 - tolerancia)) )
+	ret.v.z = zRounded;*/
 
 
 
@@ -311,7 +287,6 @@ VECTOR3D RotateWithQuaternion(VECTOR3D a, QUATERNION q)
 	qConjugado = Conjugate(q);
 
 	aQuaternionRotado = Multiply(q, Multiply(aQuaternion, qConjugado));
-
 	return aQuaternionRotado.v;
 
 

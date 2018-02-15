@@ -39,11 +39,15 @@ FRUSTUM makeFrustum(double fovX, double aspectRatio, double nearValue, double fa
 // TODO
 MATRIX4 lookAt(VECTOR3D eyePosition, VECTOR3D target, VECTOR3D upVector);
 
+VECTOR3D getUp(EULER euler);
+
+VECTOR3D getForward(EULER euler);
+
+void updateEulerOrientation(EULER& euler);
 
 void HandleMouseMotion(int x, int y);
 
 void HandleMousePassiveMotion(int x, int y);
-
 
 
 #endif

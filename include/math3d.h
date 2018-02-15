@@ -12,23 +12,23 @@
 #define RTOD            57.2957795      // radians to degrees
 
 typedef struct {
-    double x,y,z;
+	double x, y, z;
 } VECTOR3D;
 
 
 typedef struct {
-    double r,g,b;
+	double r, g, b;
 } COLOUR;
 
 typedef struct {
-    VECTOR3D column0;
-    VECTOR3D column1;
-    VECTOR3D column2;
+	VECTOR3D column0;
+	VECTOR3D column1;
+	VECTOR3D column2;
 } MATRIX3;
 
 
 typedef struct {
-    float m[16];
+	float m[16];
 } MATRIX4;
 
 typedef struct {
@@ -36,17 +36,17 @@ typedef struct {
 	VECTOR3D v;
 } QUATERNION;
 
-static const COLOUR grey = {0.7,0.7,0.7};
-static const COLOUR red = {1,0,0};
-static const COLOUR green = {0,1,0};
-static const COLOUR blue = {0,0,1};
+static const COLOUR grey = { 0.7,0.7,0.7 };
+static const COLOUR red = { 1,0,0 };
+static const COLOUR green = { 0,1,0 };
+static const COLOUR blue = { 0,0,1 };
 
-static const COLOUR darkred = {0.6,0,0};
-static const COLOUR darkgreen = {0,0.6,0};
+static const COLOUR darkred = { 0.6,0,0 };
+static const COLOUR darkgreen = { 0,0.6,0 };
 
 //TODO
 VECTOR3D Add(VECTOR3D a, VECTOR3D b);  //Ya implementado como ejemplo.
-//
+									   //
 VECTOR3D Substract(VECTOR3D a, VECTOR3D b);
 //
 VECTOR3D Multiply(VECTOR3D a, VECTOR3D b);
@@ -63,7 +63,7 @@ double DotProduct(VECTOR3D a, VECTOR3D b);
 //
 MATRIX3 Transpose(MATRIX3 m);
 //
-VECTOR3D Transform (MATRIX3 m, VECTOR3D a);
+VECTOR3D Transform(MATRIX3 m, VECTOR3D a);
 //
 MATRIX4 InverseOrthogonalMatrix(MATRIX3 A, VECTOR3D t);
 
@@ -76,6 +76,7 @@ VECTOR3D RotateWithQuaternion(VECTOR3D a, QUATERNION q);
 
 QUATERNION Vector3DToQuaternion(VECTOR3D v);
 QUATERNION SLERP_Quaternion(QUATERNION q1, QUATERNION q2, float t, double angulo);
+
 
 
 #endif
