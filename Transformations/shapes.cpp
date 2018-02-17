@@ -77,7 +77,9 @@ void drawLine(LINE line, COLOUR color, bool doDrawDots)
 	}
 	glEnd();
 
-}void drawAxis() {
+}
+
+void drawAxis() {
 	// Definir las lineas de los ejes
 	LINE lineX;
 	LINE lineY;
@@ -174,75 +176,96 @@ void drawScene()
 
 	drawBuildings();
 
+	drawTrees();
+	
 }
 
 void drawBuildings()
 {
 
+	COLOUR topColor{ .5f, .9f, .5f };
+	COLOUR frontColor{ .9f, .5f, .9f };
+	COLOUR lateralColor{ .1f, .1f, .1f };
+
 	// Edificios a la izquierda de la escena
-	drawBuilding({ -40, 10, -80 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -60, 10, -95 }, 20, 20, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -35, 15, -120 }, 30, 15, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -50, 10, -145 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -50, 20, -170 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -42, 4, -200 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -62, 8, -200 }, 16, 8, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -50, 14, -230 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ -40, 10, -80 }, 20, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ -60, 10, -95 }, 20, 20, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ -35, 15, -120 }, 30, 15, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ -50, 10, -145 }, 20, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ -50, 20, -170 }, 40, 30, 15, topColor, frontColor, lateralColor);
+	drawBuilding({ -42, 4, -200 }, 8, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ -62, 8, -200 }, 16, 8, 16, topColor, frontColor, lateralColor);
+	drawBuilding({ -50, 14, -230 }, 28, 20, 30, topColor, frontColor, lateralColor);
 
 
-	drawBuilding({ -50, 20, -370 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -42, 4, -400 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -62, 8, -400 }, 16, 4, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -50, 14, -430 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ -50, 20, -370 }, 40, 30, 15, topColor, frontColor, lateralColor);
+	drawBuilding({ -42, 4, -400 }, 8, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ -62, 8, -400 }, 16, 4, 16, topColor, frontColor, lateralColor);
+	drawBuilding({ -50, 14, -430 }, 28, 20, 30, topColor, frontColor, lateralColor);
 
 
 	// Edificios a la derecha de la escena
-	drawBuilding({ 68, 16, -75 }, 32, 20, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 45, 10, -90 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 25, 15, -120 }, 30, 15, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ 68, 16, -75 }, 32, 20, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ 45, 10, -90 }, 20, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ 25, 15, -120 }, 30, 15, 20, topColor, frontColor, lateralColor);
 
 
-	drawBuilding({ 50, 20, -170 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 42, 4, -200 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 62, 8, -200 }, 16, 8, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 50, 14, -230 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ 50, 20, -170 }, 40, 30, 15, topColor, frontColor, lateralColor);
+	drawBuilding({ 42, 4, -200 }, 8, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ 62, 8, -200 }, 16, 8, 16, topColor, frontColor, lateralColor);
+	drawBuilding({ 50, 14, -230 }, 28, 20, 30, topColor, frontColor, lateralColor);
 
 
-	drawBuilding({ 40, 10, -280 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 60, 10, -295 }, 20, 20, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 35, 15, -320 }, 30, 15, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 50, 10, -345 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 50, 20, -370 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 42, 4, -400 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 62, 8, -400 }, 16, 10, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 50, 14, -430 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ 40, 10, -280 }, 20, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ 60, 10, -295 }, 20, 20, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ 35, 15, -320 }, 30, 15, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ 50, 10, -345 }, 20, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ 50, 20, -370 }, 40, 30, 15, topColor, frontColor, lateralColor);
+	drawBuilding({ 42, 4, -400 }, 8, 10, 20, topColor, frontColor, lateralColor);
+	drawBuilding({ 62, 8, -400 }, 16, 10, 16, topColor, frontColor, lateralColor);
+	drawBuilding({ 50, 14, -430 }, 28, 20, 30, topColor, frontColor, lateralColor);
 
 
 
 	
 
 	// Edificio piramide en el centro
-	drawBuilding({ 0, 4, -530 }, 8, 40, 40, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 0, 12, -530 }, 8, 30, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 0, 20, -530 }, 8, 20, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ 0, 4, -530 }, 8, 40, 40, topColor, frontColor, lateralColor);
+	drawBuilding({ 0, 12, -530 }, 8, 30, 30, topColor, frontColor, lateralColor);
+	drawBuilding({ 0, 20, -530 }, 8, 20, 20, topColor, frontColor, lateralColor);
 
 
 	// Edificio escalonado
-	drawBuilding({ -50, 6, -270 }, 12, 40, 40, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -55, 18, -270 }, 12, 30, 40, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -60, 30, -270 }, 12, 20, 40, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ -50, 6, -270 }, 12, 40, 40, topColor, frontColor, lateralColor);
+	drawBuilding({ -55, 18, -270 }, 12, 30, 40, topColor, frontColor, lateralColor);
+	drawBuilding({ -60, 30, -270 }, 12, 20, 40, topColor, frontColor, lateralColor);
 
 
 
 }
 
-
-void drawBuilding(VECTOR3D initialPosition, int alto, int ancho, int fondo, VECTOR3D color01, VECTOR3D color02, VECTOR3D color03)
+void drawTrees()
 {
-	drawBox(initialPosition, ancho, alto, fondo, color01, color02, color03);
+	VECTOR3D leftPosition { -15.0f, 0.0f, -65.0f };
+	VECTOR3D rightPosition{ 15.0f, 0.0f, -65.0f };
+
+	float distanceToTree = -30.0f;
+
+	for (int i = 0; i < 15; ++i)
+	{
+		drawTree(leftPosition);
+		drawTree(rightPosition);
+		leftPosition.z += distanceToTree;
+		rightPosition.z += distanceToTree;
+	}
 }
 
-void drawMuro(VECTOR3D initialPosition, int alto, int ancho, VECTOR3D color01, VECTOR3D color02, VECTOR3D color03)
+void drawBuilding(VECTOR3D initialPosition, int alto, int ancho, int fondo, COLOUR topColor, COLOUR frontColor, COLOUR leftColor)
+{
+	drawBox(initialPosition, ancho, alto, fondo, topColor, frontColor, leftColor);
+}
+
+void drawMuro(VECTOR3D initialPosition, int alto, int ancho, COLOUR topColor, COLOUR frontColor, COLOUR leftColor)
 {
 	float anchoLadrillo = 0.4f;
 	float altoLadrillo = 0.2f;
@@ -255,21 +278,17 @@ void drawMuro(VECTOR3D initialPosition, int alto, int ancho, VECTOR3D color01, V
 		for (int j = 0; j < alto; ++j)
 		{
 			currentPosition = { initialPosition.x + (i * anchoLadrillo), initialPosition.y + (j * altoLadrillo), initialPosition.z };
-			drawBox(currentPosition, anchoLadrillo, altoLadrillo, fondoLadrillo, color01, color02, color03);
+			drawBox(currentPosition, anchoLadrillo, altoLadrillo, fondoLadrillo, topColor, frontColor, leftColor);
 		}
 	}
 }
 
-//color01->top
-//color02->front
-//color03->left
-
-void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, VECTOR3D color01, VECTOR3D color02, VECTOR3D color03)
+void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR topColor, COLOUR frontColor, COLOUR leftColor)
 {
 	glBegin(GL_QUADS);
 	// top
-
-	glColor3f(color01.x, color01.y, color01.z);
+	
+	glColor3f(topColor.r, topColor.g, topColor.b);
 
 	//glColor3f(0.3f, 0.9f, 0.3f);
 	glNormal3f(0.0f, 1.0f, 0.0f);
@@ -287,7 +306,7 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, VECTOR3
 	glBegin(GL_QUADS);
 	// front
 
-	glColor3f(color02.x, color02.y, color02.z);
+	glColor3f(frontColor.r, frontColor.g, frontColor.b);
 
 	//glColor3f(0.3f, 0.3f, 0.9f);
 	glNormal3f(0.0f, 0.0f, 1.0f);
@@ -304,7 +323,7 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, VECTOR3
 
 	glBegin(GL_QUADS);
 	// right
-	glColor3f(color03.x, color03.y, color03.z);
+	glColor3f(leftColor.r, leftColor.g, leftColor.b);
 
 	//glColor3f(0.9f, 0.3f, 0.3f);
 	glNormal3f(1.0f, 0.0f, 0.0f);
@@ -321,7 +340,7 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, VECTOR3
 
 	glBegin(GL_QUADS);
 	// left
-	glColor3f(color03.x, color03.y, color03.z);
+	glColor3f(leftColor.r, leftColor.g, leftColor.b);
 
 	//glColor3f(0.3f, 0.9f, 0.9f);
 	glNormal3f(-1.0f, 0.0f, 0.0f);
@@ -338,7 +357,7 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, VECTOR3
 
 	glBegin(GL_QUADS);
 	// bottom
-	glColor3f(color01.x, color01.y, color01.z);
+	glColor3f(topColor.r, topColor.g, topColor.b);
 
 	//glColor3f(0.9f, 0.3f, 0.9f);
 	glNormal3f(0.0f, -1.0f, 0.0f);
@@ -356,7 +375,7 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, VECTOR3
 	glBegin(GL_QUADS);
 	// back
 
-	glColor3f(color02.x, color02.y, color02.z);
+	glColor3f(frontColor.r, frontColor.g, frontColor.b);
 
 	//glColor3f(0.9f, 0.9f, 0.3f);
 	glNormal3f(0.0f, 0.0f, -1.0f);
@@ -372,7 +391,7 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, VECTOR3
 	glEnd();
 }
 
-void drawSuelo(VECTOR3D initialPosition, int ancho, int fondo, VECTOR3D color01, VECTOR3D color02, VECTOR3D color03)
+void drawSuelo(VECTOR3D initialPosition, int ancho, int fondo, COLOUR topColor, COLOUR frontColor, COLOUR leftColor)
 {
 	float anchoLadrillo = 10.0f;
 	float altoLadrillo = 0.4f;
@@ -385,7 +404,24 @@ void drawSuelo(VECTOR3D initialPosition, int ancho, int fondo, VECTOR3D color01,
 		for (int j = 0; j < fondo; ++j)
 		{
 			currentPosition = { initialPosition.x + (i * anchoLadrillo), initialPosition.y, initialPosition.z - (j * fondoLadrillo) };
-			drawBox(currentPosition, anchoLadrillo, altoLadrillo, fondoLadrillo, color01, color02, color03);
+			drawBox(currentPosition, anchoLadrillo, altoLadrillo, fondoLadrillo, topColor, frontColor, leftColor);
 		}
 	}
+}
+
+void drawTree(VECTOR3D initialPosition) {
+	
+
+	COLOUR trunkColor{ 0.647059f,  0.164706f, 0.164706f };
+	COLOUR leavesColour{ 0.0f, 1.0f, 0.0f };
+
+	VECTOR3D trunkPosition = initialPosition;
+	trunkPosition.y += 1.5;
+
+	VECTOR3D leavesPosition = trunkPosition;
+	leavesPosition.y += 2.5;
+
+	drawBox(trunkPosition, 0.4, 3, 0.4, trunkColor, trunkColor, trunkColor);
+	drawBox(leavesPosition, 2.34, 1.8, 2.4, leavesColour, leavesColour, leavesColour);
+
 }

@@ -12,6 +12,10 @@
 #include "math3d.h"
 
 
+#define NEAR_VALUE 0.1
+#define FAR_VALUE 4000
+
+
 void Display(void);
 void Init(void);
 void Render(void);
@@ -156,7 +160,7 @@ int main(int argc, char **argv)
 	glutPassiveMotionFunc(HandleMousePassiveMotion);
 
 	/*
-	Funciones de test aÃ±adidas para comprobar que las funciones pedidas estan
+	Funciones de test añadidas para comprobar que las funciones pedidas estan
 	implementadas correctamente
 	*/
 
@@ -207,8 +211,10 @@ void Display(void)
 
 	glDrawBuffer(GL_BACK);
 
-	double nearValue = 0.1;
-	double farValue = 10000;
+	//double nearValue = 0.1;
+	//double farValue = 10000;
+	double nearValue = NEAR_VALUE;
+	double farValue = FAR_VALUE;
 
 	double aspectRatio = camera.screenwidth / (double)camera.screenheight;
 	FRUSTUM centerFrustum = makeFrustum(camera.aperture, aspectRatio, nearValue, farValue);
@@ -407,11 +413,54 @@ void InitEuler()
 	rotacionEuler.orientation = { 1, 0, 0, 0 };
 }
 
+void testUnProject(int x, int y) {
+	GLdouble pos3D_x, pos3D_y, pos3D_z;
+
+	// arrays to hold matrix information
+
+	GLdouble model_view[16];
+	glGetDoublev(GL_MODELVIEW_MATRIX, model_view);
+
+	GLdouble projection[16];
+	glGetDoublev(GL_PROJECTION_MATRIX, projection);
+
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	// get 3D coordinates based on window coordinates
+
+	gluUnProject(x, viewport[3] - y, NEAR_VALUE,
+		model_view, projection, viewport,
+		&pos3D_x, &pos3D_y, &pos3D_z);
+
+	VECTOR3D vectorClickNear{ pos3D_x, pos3D_y, pos3D_z };
+
+
+	gluUnProject(x, viewport[3] - y, FAR_VALUE,
+		model_view, projection, viewport,
+		&pos3D_x, &pos3D_y, &pos3D_z);
+
+	VECTOR3D vectorClickFar{ pos3D_x, pos3D_y, pos3D_z };
+
+
+	VECTOR3D forward = getForward(rotacionEuler);
+
+	VECTOR3D newVector{ pos3D_x, pos3D_y, pos3D_z };
+
+	for (int i = 0; i < 2; ++i)
+	{
+		newVector = Add(newVector, forward);
+	}
+
+
+}
+
 //Para controlar la cÃ¡mara tienes que obtener los cambios de posiciÃ³n del ratÃ³n y transformarlos
 //en ejes EULER (yaw y pitch). La cÃ¡mara debe mirar guiada por el ratÃ³n. Utiliza para ello las
 //siguientes funciones de GLUT:
 void HandleMouseMotion(int x, int y)
 {
+
 	//xPrev e yPrev se inicializan a INT_MIN y se comprueban antes de actualizar los angulos para evitar un salto brusco
 	//al inicializar el programa
 	if (xPrev != INT_MIN && yPrev != INT_MIN)
@@ -419,8 +468,8 @@ void HandleMouseMotion(int x, int y)
 		// Calcular grados de rotacion en funcion de los valores de x e y.
 		// Se hace una resta de los valores antiguos y los nuevos y el resultado se considera
 		// el angulo de rotacion (en grados)
-		rotacionEuler.yaw = (y - yPrev) * 0.7;
-		rotacionEuler.pitch = -((x - xPrev) * 0.5);
+		rotacionEuler.yaw = ((y - yPrev) * DTOR) * 4;
+		rotacionEuler.pitch = -((x - xPrev) * DTOR) * 4;
 		rotacionEuler.roll = 0;
 
 		// Solo se realizan los calculos de los vectores de camara si alguno de los
@@ -472,6 +521,8 @@ void HandleMouseMotion(int x, int y)
 	xPrev = x;
 	yPrev = y;
 
+	testUnProject(x, y);
+
 }
 
 void HandleMousePassiveMotion(int x, int y)
@@ -487,4 +538,3 @@ void HandleMousePassiveMotion(int x, int y)
 	//HandleMouseMotion(x, y);
 	//glutPostRedisplay();
 }
-
