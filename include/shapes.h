@@ -19,10 +19,12 @@ void drawLine(LINE line, COLOUR color = grey, bool doDrawDots = false);
 void drawAxis();
 
 
-
-void drawBox(VECTOR3D boxPosition);
+void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, VECTOR3D color01, VECTOR3D color02, VECTOR3D color03);
+void drawMuro(VECTOR3D initialPosition, int alto, int ancho, VECTOR3D color01, VECTOR3D color02, VECTOR3D color03);
+void drawSuelo(VECTOR3D initialPosition, int ancho, int fondo, VECTOR3D color01, VECTOR3D color02, VECTOR3D color03);
 void drawScene();
-
+void drawBuildings();
+void drawBuilding(VECTOR3D initialPosition, int alto, int ancho, int fondo, VECTOR3D color01, VECTOR3D color02, VECTOR3D color03);
 
 
 

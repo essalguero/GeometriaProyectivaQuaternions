@@ -2,6 +2,10 @@
 
 #include <math.h>
 
+void InitCamera(int);
+
+
+
 VECTOR3D Add(VECTOR3D a, VECTOR3D b) //Ya implementado como ejemplo.
 {
 	VECTOR3D ret;
@@ -176,7 +180,7 @@ QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis)
 
 	QUATERNION rotor;
 	double anguloRadianes = DTOR * angle;
-	vectorUnitario = Normalize(axis);
+	//vectorUnitario = Normalize(axis);
 
 	float coseno = cos(anguloRadianes / 2);
 	float seno = sin(anguloRadianes / 2);
@@ -355,3 +359,4 @@ QUATERNION SLERP_Quaternion(QUATERNION q1, QUATERNION q2, float t, double angulo
 
 	return ret;
 }
+

@@ -7,6 +7,7 @@ extern CAMERA camera;
 extern EULER rotacionEuler;
 
 using namespace std;
+
 // TODO
 // devuelve los valores de distancia de los planos a partir del fov horizontal
 FRUSTUM makeFrustum(double fovX, double aspectRatio, double nearValue, double farValue)
@@ -86,7 +87,7 @@ void updateEulerOrientation(EULER& euler)
 
 
 
-	VECTOR3D ejeY;
+	/*VECTOR3D ejeY;
 	VECTOR3D ejeX;
 	VECTOR3D ejeZ;
 
@@ -101,18 +102,30 @@ void updateEulerOrientation(EULER& euler)
 
 	QUATERNION qRoll = QuaternionFromAngleAxis(euler.roll, ejeZ);
 
-	rotation = Multiply(qPitch, qYaw);
+	rotation = Multiply(qPitch, qYaw);*/
 
 
 	/*camera.direction = RotateWithQuaternion(camera.direction, rotation);
 	camera.position = RotateWithQuaternion(camera.position, rotation);
 	camera.up = RotateWithQuaternion(camera.up, rotation);*/
 
-	euler.orientation = rotation;
+	//euler.orientation = rotation;
 
 	/*cout << "camera.direction.x: " << camera.direction.x << " - camera.direction.y: " << camera.direction.y << " - camera.direction.z: " << camera.direction.z << endl;*/
 
 
+	VECTOR3D xAxis = Normalize(CrossProduct(camera.up, camera.direction));
+	VECTOR3D upAxis = Normalize(CrossProduct(camera.direction, xAxis));
+
+	VECTOR3D direction = RotateWithQuaternion(camera.direction, QuaternionFromAngleAxis(rotacionEuler.yaw, xAxis));
+	direction = RotateWithQuaternion(direction, QuaternionFromAngleAxis(rotacionEuler.pitch, upAxis));
+
+	//Hay que actualizar los parametros de la camara puesto que son estos los que se utilizan en
+	// la funcion Display (Marcada como funcion de pintado para OpenGL). Si se llamara a lookAt
+	// para actualizar la camara, la matriz generada se sobreescribiria en la siguiente llamada
+	// a display, puesto que display tambien llama a lookAt (pasando los vectores de la camara)
+	camera.direction = direction;
+	camera.up = upAxis;
 
 
 }
@@ -136,4 +149,5 @@ VECTOR3D getForward(EULER euler)
 	ret = Normalize(camera.direction);
 	return ret;
 }
+
 

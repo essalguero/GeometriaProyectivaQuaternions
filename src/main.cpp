@@ -397,8 +397,8 @@ void HandleMouseMotion(int x, int y)
 		// Calcular grados de rotacion en funcion de los valores de x e y.
 		// Se hace una resta de los valores antiguos y los nuevos y el resultado se considera
 		// el angulo de rotacion (en grados)
-		rotacionEuler.yaw = (y - yPrev);
-		rotacionEuler.pitch = (x - xPrev);
+		rotacionEuler.yaw = (y - yPrev) * 0.7;
+		rotacionEuler.pitch = -((x - xPrev) * 0.5);
 		rotacionEuler.roll = 0;
 
 		// Solo se realizan los calculos de los vectores de camara si alguno de los
@@ -408,12 +408,17 @@ void HandleMouseMotion(int x, int y)
 			// Actualizar los angulos de rotacion en la estructura
 			updateEulerOrientation(rotacionEuler);
 
-			// Variables declaradas para mejorar la legibilidad del codigo
+
+			
+
+
+
+			/*// Variables declaradas para mejorar la legibilidad del codigo
 			// Contienen los nuevos vectores que hay que utilizar para actualizar la camara
 			//VECTOR3D eyePosition = RotateWithQuaternion(camera.position, rotacionEuler.orientation);
 
-			VECTOR3D eyePosition = RotateWithQuaternion(camera.position, QuaternionFromAngleAxis(rotacionEuler.yaw, { 1, 0, 0 }));
-			eyePosition = RotateWithQuaternion(eyePosition, QuaternionFromAngleAxis(rotacionEuler.pitch, { 0, 1, 0 }));
+			VECTOR3D eyePosition = RotateWithQuaternion(camera.position, QuaternionFromAngleAxis(rotacionEuler.yaw, {1, 0, 0}));
+			eyePosition = RotateWithQuaternion(eyePosition, QuaternionFromAngleAxis(rotacionEuler.pitch, {0, 1, 0}));
 			//eyePosition = RotateWithQuaternion(eyePosition, QuaternionFromAngleAxis(rotacionEuler.roll, {0, 0, 1}));
 
 			// No actualizar el vector target (camera.direction), si no siempre gira alrededor de ese punto
@@ -423,9 +428,9 @@ void HandleMouseMotion(int x, int y)
 			//target = RotateWithQuaternion(target, QuaternionFromAngleAxis(rotacionEuler.pitch, {0, 1, 0}));
 
 			//VECTOR3D upVector = RotateWithQuaternion(camera.up, rotacionEuler.orientation);
-			VECTOR3D upVector = RotateWithQuaternion(camera.up, QuaternionFromAngleAxis(rotacionEuler.yaw, { 1, 0, 0 }));
-			upVector = RotateWithQuaternion(upVector, QuaternionFromAngleAxis(rotacionEuler.pitch, { 0, 1, 0 }));
-		    //upVector = RotateWithQuaternion(upVector, QuaternionFromAngleAxis(rotacionEuler.roll, {0, 0, 1}));
+			VECTOR3D upVector = RotateWithQuaternion(camera.up, QuaternionFromAngleAxis(rotacionEuler.yaw, {1, 0, 0}));
+			upVector = RotateWithQuaternion(upVector, QuaternionFromAngleAxis(rotacionEuler.pitch, {0, 1, 0}));
+			//upVector = RotateWithQuaternion(upVector, QuaternionFromAngleAxis(rotacionEuler.roll, {0, 0, 1}));
 
 			//Hay que actualizar los parametros de la camara puesto que son estos los que se utilizan en
 			// la funcion Display (Marcada como funcion de pintado para OpenGL). Si se llamara a lookAt
@@ -433,9 +438,12 @@ void HandleMouseMotion(int x, int y)
 			// a display, puesto que display tambien llama a lookAt (pasando los vectores de la camara)
 			//camera.direction = target;
 			camera.position = eyePosition;
-			camera.up = upVector;
+			camera.up = upVector;*/
 		}
 
+		//cout << "camera.direction.x: " << camera.direction.x << " - camera.direction.y: " << camera.direction.y << " - camera.direction.z: " << camera.direction.z << endl;
+		//cout << "camera.position.x: " << camera.position.x << " - camera.position.y: " << camera.position.y << " - camera.position.z: " << camera.position.z << endl;
+		//cout << "rotacionEuler.pitch: " << rotacionEuler.pitch << " - rotacionEuler.yaw: " << rotacionEuler.yaw << " - rotacionEuler.z: " << rotacionEuler.roll << endl;
 	}
 
 	// Guardar las nuevas coordenadas del raton para utilizarlas en la siguiente llamada a la funcion
@@ -449,11 +457,12 @@ void HandleMousePassiveMotion(int x, int y)
 	//cout << "Pasive -> x: " << x << "\ty: " << y << endl;
 
 
-	//xPrev = x;
-	//yPrev = y;
+	xPrev = x;
+	yPrev = y;
 
 	// La funcionalidad de esta funcion es la misma que en la funcion HandleMouseMotion
 	// Por este motivo se llama directamente a la funcion
-	HandleMouseMotion(x, y);
+	//HandleMouseMotion(x, y);
 	//glutPostRedisplay();
 }
+
