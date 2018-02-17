@@ -170,6 +170,16 @@ int main(int argc, char **argv)
 
 void Init(void)
 {
+
+	float fogDensity = 0.3;
+	static float fog_color[] = { 0.3, 0.3, 0.3, 0.7 };
+
+	glFogi(GL_FOG_MODE, GL_LINEAR);
+	glFogf(GL_FOG_DENSITY, fogDensity);
+	glFogfv(GL_FOG_COLOR, fog_color);
+	glFogf(GL_FOG_START, 100.0);
+	glFogf(GL_FOG_END, 400.0);
+
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_LINE_SMOOTH);
 	glDisable(GL_POINT_SMOOTH);
@@ -243,8 +253,9 @@ void Render(void)
 	glRotatef(rotateangle, 0.0, 1.0, 0.0);
 
 	drawAxis();
-
+	glEnable(GL_FOG);
 	drawScene();
+	glDisable(GL_FOG);
 
 	glPopMatrix();
 }

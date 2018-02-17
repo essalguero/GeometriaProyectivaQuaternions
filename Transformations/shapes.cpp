@@ -3,6 +3,9 @@
 #include "shapes.h"
 
 #include "math3d.h"
+#include "camera.h"
+
+extern CAMERA camera;
 
 void drawDot(VECTOR3D position, float sradius, COLOUR color)
 {
@@ -139,8 +142,22 @@ void drawLine(LINE line, COLOUR color, bool doDrawDots)
 }
 
 
+void drawBoundingBox()
+{
+	
+	drawBox({ camera.position.x, 0, camera.position.z - 800 }, 4000, 4000, 1, { .1f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
+	drawBox({ camera.position.x, 0, camera.position.z + 800 }, 4000, 4000, 1, { .1f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
+	drawBox({ camera.position.x, camera.position.y - 800, camera.position.z }, 4000, 1, 4000, { .1f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
+	drawBox({ camera.position.x, camera.position.y + 800, camera.position.z }, 4000, 1, 4000, { .1f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
+	drawBox({ camera.position.x - 800, 0, camera.position.z }, 1, 4000, 4000, { .1f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
+	drawBox({ camera.position.x + 800, 0, camera.position.z }, 1, 4000, 4000, { .1f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
+}
+
 void drawScene()
 {
+
+	drawBoundingBox();
+
 	drawBox({ 0, 0, 0 }, 1, 1, 1, { .1f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
 	drawBox({ 0, 0, 40 }, 1, 1, 1, { .5f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
 	drawBox({ -20, 0, 20 }, 1, 1, 1, { .5f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
@@ -169,13 +186,13 @@ void drawBuildings()
 	drawBuilding({ -50, 10, -145 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -50, 20, -170 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -42, 4, -200 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -62, 8, -200 }, 8, 16, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ -62, 8, -200 }, 16, 8, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -50, 14, -230 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 
 
 	drawBuilding({ -50, 20, -370 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -42, 4, -400 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -62, 8, -400 }, 8, 16, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ -62, 8, -400 }, 16, 4, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -50, 14, -430 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 
 
@@ -187,7 +204,7 @@ void drawBuildings()
 
 	drawBuilding({ 50, 20, -170 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 42, 4, -200 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 62, 8, -200 }, 8, 16, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ 62, 8, -200 }, 16, 8, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 50, 14, -230 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 
 
@@ -197,7 +214,7 @@ void drawBuildings()
 	drawBuilding({ 50, 10, -345 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 50, 20, -370 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 42, 4, -400 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ 62, 8, -400 }, 8, 16, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ 62, 8, -400 }, 16, 10, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 50, 14, -430 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 
 
