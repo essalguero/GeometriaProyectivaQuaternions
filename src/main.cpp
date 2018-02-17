@@ -398,6 +398,49 @@ void InitEuler()
 
 
 
+void testUnProject(int x, int y) {
+	GLdouble pos3D_x, pos3D_y, pos3D_z;
+
+	// arrays to hold matrix information
+
+	GLdouble model_view[16];
+	glGetDoublev(GL_MODELVIEW_MATRIX, model_view);
+
+	GLdouble projection[16];
+	glGetDoublev(GL_PROJECTION_MATRIX, projection);
+
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	// get 3D coordinates based on window coordinates
+
+	gluUnProject(x, viewport[3] - y, NEAR_VALUE,
+		model_view, projection, viewport,
+		&pos3D_x, &pos3D_y, &pos3D_z);
+
+	VECTOR3D vectorClickNear{ pos3D_x, pos3D_y, pos3D_z };
+
+
+	gluUnProject(x, viewport[3] - y, FAR_VALUE,
+		model_view, projection, viewport,
+		&pos3D_x, &pos3D_y, &pos3D_z);
+
+	VECTOR3D vectorClickFar{ pos3D_x, pos3D_y, pos3D_z };
+
+
+	VECTOR3D forward = getForward(rotacionEuler);
+
+	VECTOR3D newVector{ pos3D_x, pos3D_y, pos3D_z };
+
+	for (int i = 0; i < 2; ++i)
+	{
+		newVector = Add(newVector, forward);
+	}
+
+
+}
+
+
 //Para controlar la camara tienes que obtener los cambios de posicion del raton y transformarlos
 //en ejes EULER (yaw y pitch). La camara debe mirar guiada por el raton. Utiliza para ello las
 //siguientes funciones de GLUT:
@@ -428,6 +471,7 @@ void HandleMouseMotion(int x, int y)
 	xPrev = x;
 	yPrev = y;
 
+	testUnProject(x, y);
 }
 
 void HandleMousePassiveMotion(int x, int y)
@@ -435,3 +479,4 @@ void HandleMousePassiveMotion(int x, int y)
 	xPrev = x;
 	yPrev = y;
 }
+
