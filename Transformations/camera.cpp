@@ -64,54 +64,13 @@ MATRIX4 lookAt(VECTOR3D eyePosition, VECTOR3D target, VECTOR3D upVector)
 }
 
 
-//En la siguiente funciÃ³n (uptadeEulerOrientation): utilizando los valores yaw, pitch, roll, y las
+//En la siguiente funcion (uptadeEulerOrientation): utilizando los valores yaw, pitch, roll, y las
 //funciones anteriores QuaternionFromAngleAxis y Multiply (cuaternio), actualiza la estructura EULER
 //encadenando tres giros en los tres ejes X, Y y Z.
 void updateEulerOrientation(EULER& euler)
 {
 
 
-
-
-	/*QUATERNION qPitch = QuaternionFromAngleAxis(euler.pitch, camera.up);
-
-	VECTOR3D vectorYaw = CrossProduct(camera.up, camera.direction);
-
-	QUATERNION qYaw = QuaternionFromAngleAxis(euler.yaw, vectorYaw);
-
-	QUATERNION rotation = Multiply(qPitch, qYaw);
-
-	euler.orientation = rotation;*/
-
-
-
-
-
-	/*VECTOR3D ejeY;
-	VECTOR3D ejeX;
-	VECTOR3D ejeZ;
-
-	ejeX = Normalize(CrossProduct(camera.up, camera.direction));
-	ejeY = Normalize(CrossProduct(camera.direction, ejeX));
-	ejeZ = Normalize(camera.direction);
-	QUATERNION rotation;
-
-	QUATERNION qPitch = QuaternionFromAngleAxis(euler.pitch, ejeY);
-
-	QUATERNION qYaw = QuaternionFromAngleAxis(-euler.yaw, ejeX);
-
-	QUATERNION qRoll = QuaternionFromAngleAxis(euler.roll, ejeZ);
-
-	rotation = Multiply(qPitch, qYaw);*/
-
-
-	/*camera.direction = RotateWithQuaternion(camera.direction, rotation);
-	camera.position = RotateWithQuaternion(camera.position, rotation);
-	camera.up = RotateWithQuaternion(camera.up, rotation);*/
-
-	//euler.orientation = rotation;
-
-	/*cout << "camera.direction.x: " << camera.direction.x << " - camera.direction.y: " << camera.direction.y << " - camera.direction.z: " << camera.direction.z << endl;*/
 
 
 	VECTOR3D xAxis = Normalize(CrossProduct(camera.up, camera.direction));
@@ -145,7 +104,6 @@ VECTOR3D getForward(EULER euler)
 {
 	VECTOR3D ret;
 
-	//ret = RotateWithQuaternion({0, 0, -1}, euler.orientation);
 	ret = Normalize(camera.direction);
 	return ret;
 }

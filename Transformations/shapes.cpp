@@ -143,7 +143,7 @@ void drawAxis() {
 
 }
 
-
+// Dibuja una caja que engloba toda la escena. Necesario para la correcta representacion de la niebla
 void drawBoundingBox()
 {
 	
@@ -155,6 +155,7 @@ void drawBoundingBox()
 	drawBox({ camera.position.x + 800, 0, camera.position.z }, 1, 4000, 4000, { .1f, .0f, .0f }, { .1f, .0f, .0f }, { .1f, .0f, .0f });
 }
 
+// Dibuja la escena ayudandose de funciones especificas para dibujar arboles, edificios y demas objetos
 void drawScene()
 {
 
@@ -180,6 +181,7 @@ void drawScene()
 	
 }
 
+// Dibuja todos los arboles de la escena
 void drawBuildings()
 {
 
@@ -227,8 +229,6 @@ void drawBuildings()
 
 
 
-	
-
 	// Edificio piramide en el centro
 	drawBuilding({ 0, 4, -530 }, 8, 40, 40, topColor, frontColor, lateralColor);
 	drawBuilding({ 0, 12, -530 }, 8, 30, 30, topColor, frontColor, lateralColor);
@@ -244,6 +244,7 @@ void drawBuildings()
 
 }
 
+//Se encarga de dibujar todos los arboles de la escena.Dibujar 2 lineas de arboles
 void drawTrees()
 {
 	VECTOR3D leftPosition { -15.0f, 0.0f, -65.0f };
@@ -260,11 +261,13 @@ void drawTrees()
 	}
 }
 
+// Dibuja un edificio (o una parte de el). Basicamente dibuja una caja
 void drawBuilding(VECTOR3D initialPosition, int alto, int ancho, int fondo, COLOUR topColor, COLOUR frontColor, COLOUR leftColor)
 {
 	drawBox(initialPosition, ancho, alto, fondo, topColor, frontColor, leftColor);
 }
 
+// Dibuja el muro de la escena como un conjunto de cajas
 void drawMuro(VECTOR3D initialPosition, int alto, int ancho, COLOUR topColor, COLOUR frontColor, COLOUR leftColor)
 {
 	float anchoLadrillo = 0.4f;
@@ -283,6 +286,7 @@ void drawMuro(VECTOR3D initialPosition, int alto, int ancho, COLOUR topColor, CO
 	}
 }
 
+// Dibuja una caja. Pos parametro se especifica la posicion, el color y el size de la caja
 void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR topColor, COLOUR frontColor, COLOUR leftColor)
 {
 	glBegin(GL_QUADS);
@@ -290,7 +294,6 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR 
 	
 	glColor3f(topColor.r, topColor.g, topColor.b);
 
-	//glColor3f(0.3f, 0.9f, 0.3f);
 	glNormal3f(0.0f, 1.0f, 0.0f);
 	VECTOR3D position = Add(positionBox, { -(ancho / 2.0f), (alto / 2.0f), (fondo / 2.0f) });
 	glVertex3f(position.x, position.y, position.z);
@@ -308,7 +311,6 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR 
 
 	glColor3f(frontColor.r, frontColor.g, frontColor.b);
 
-	//glColor3f(0.3f, 0.3f, 0.9f);
 	glNormal3f(0.0f, 0.0f, 1.0f);
 	position = Add(positionBox, { -(ancho / 2.0f), -(alto / 2.0f), (fondo / 2.0f) });
 	glVertex3f(position.x, position.y, position.z);
@@ -325,7 +327,6 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR 
 	// right
 	glColor3f(leftColor.r, leftColor.g, leftColor.b);
 
-	//glColor3f(0.9f, 0.3f, 0.3f);
 	glNormal3f(1.0f, 0.0f, 0.0f);
 	position = Add(positionBox, { (ancho / 2.0f), -(alto / 2.0f), (fondo / 2.0f) });
 	glVertex3f(position.x, position.y, position.z);
@@ -342,7 +343,6 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR 
 	// left
 	glColor3f(leftColor.r, leftColor.g, leftColor.b);
 
-	//glColor3f(0.3f, 0.9f, 0.9f);
 	glNormal3f(-1.0f, 0.0f, 0.0f);
 	position = Add(positionBox, { -(ancho / 2.0f), -(alto / 2.0f), (fondo / 2.0f) });
 	glVertex3f(position.x, position.y, position.z);
@@ -359,7 +359,6 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR 
 	// bottom
 	glColor3f(topColor.r, topColor.g, topColor.b);
 
-	//glColor3f(0.9f, 0.3f, 0.9f);
 	glNormal3f(0.0f, -1.0f, 0.0f);
 	position = Add(positionBox, { -(ancho / 2.0f), -(alto / 2.0f), (fondo / 2.0f) });
 	glVertex3f(position.x, position.y, position.z);
@@ -377,7 +376,6 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR 
 
 	glColor3f(frontColor.r, frontColor.g, frontColor.b);
 
-	//glColor3f(0.9f, 0.9f, 0.3f);
 	glNormal3f(0.0f, 0.0f, -1.0f);
 	position = Add(positionBox, { (ancho / 2.0f), (alto / 2.0f), -(fondo / 2.0f) });
 	glVertex3f(position.x, position.y, position.z);
@@ -391,6 +389,7 @@ void drawBox(VECTOR3D positionBox, float ancho, float alto, float fondo, COLOUR 
 	glEnd();
 }
 
+// Dibuja El suelo de la escena
 void drawSuelo(VECTOR3D initialPosition, int ancho, int fondo, COLOUR topColor, COLOUR frontColor, COLOUR leftColor)
 {
 	float anchoLadrillo = 10.0f;
@@ -409,9 +408,10 @@ void drawSuelo(VECTOR3D initialPosition, int ancho, int fondo, COLOUR topColor, 
 	}
 }
 
+// Dibuha un arbol en la posicion pasada como parametro
+// El arbol es una composicion de dos cajas
 void drawTree(VECTOR3D initialPosition) {
 	
-
 	COLOUR trunkColor{ 0.647059f,  0.164706f, 0.164706f };
 	COLOUR leavesColour{ 0.0f, 1.0f, 0.0f };
 

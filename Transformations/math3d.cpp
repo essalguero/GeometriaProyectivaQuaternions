@@ -150,24 +150,6 @@ MATRIX4 InverseOrthogonalMatrix(MATRIX3 A, VECTOR3D t)
 
 	ret.m[15] = 1;
 
-
-	/*ret.m[0] = A.column0.x;
-	ret.m[1] = A.column0.y;
-	ret.m[2] = A.column0.z;
-	ret.m[3] = 0;
-	ret.m[4] = A.column0.x;
-	ret.m[5] = A.column0.y;
-	ret.m[6] = A.column0.z;
-	ret.m[7] = 0;
-	ret.m[8] = A.column0.x;
-	ret.m[9] = A.column0.y;
-	ret.m[10] = A.column0.z;
-	ret.m[11] = 0;
-	ret.m[12] = -DotProduct(t, A.column0);
-	ret.m[13] = -DotProduct(t, A.column1);
-	ret.m[14] = -DotProduct(t, A.column2);
-	ret.m[15] = 1;*/
-
 	return ret;
 }
 
@@ -180,7 +162,6 @@ QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis)
 
 	QUATERNION rotor;
 	double anguloRadianes = DTOR * angle;
-	//vectorUnitario = Normalize(axis);
 
 	float coseno = cos(anguloRadianes / 2);
 	float seno = sin(anguloRadianes / 2);
@@ -193,8 +174,6 @@ QUATERNION QuaternionFromAngleAxis(float angle, VECTOR3D axis)
 }
 
 // Cuaternio necesario para transformar el vector From en el Vector To
-// Las normas de los vectores pueden ser distintas?
-//Sip, serÃ­a el cuaternion de rotaciÃ³n, asÃ­ que las normas deberÃ­an darte igual. No tienes que escalarlos, solo rotar de uno a otro.
 QUATERNION QuaternionFromToVectors(VECTOR3D from, VECTOR3D to)
 {
 	QUATERNION fromQuaternion;
@@ -248,22 +227,6 @@ QUATERNION Multiply(QUATERNION a, QUATERNION b)
 	// Calcular el Vector3d del nuevo QUATERNION
 	ret.v = Add(v1, v2);
 	ret.v = Add(ret.v, vCross);
-
-
-	// AÃ±adido para evitar problemas de redondeos en las rotaciones
-	/*double xRounded = round(ret.v.x);
-	double yRounded = round(ret.v.y);
-	double zRounded = round(ret.v.z);
-
-	if ( (abs(ret.v.x - xRounded) < tolerancia) || (abs(ret.v.x - xRounded) > (1 - tolerancia)) )
-	ret.v.x = xRounded;
-
-	if ( (abs(ret.v.y - yRounded) < tolerancia) || (abs(ret.v.y - yRounded) > (1 - tolerancia)) )
-	ret.v.y = yRounded;
-
-	if ( (abs(ret.v.z - zRounded) < tolerancia) || (abs(ret.v.z - zRounded) > (1 - tolerancia)) )
-	ret.v.z = zRounded;*/
-
 
 
 	return ret;

@@ -48,21 +48,9 @@ void testMultiply() {
 	VECTOR3D v2{ 0, 1, 0 };
 	VECTOR3D v3{ 0, 0, 1 };
 
-	/*v1.x = 1;
-	v1.y = 0;
-	v1.z = 0;*/
-
 	QUATERNION q1 = Vector3DToQuaternion(v1);
 
-	/*v2.x = 0;
-	v2.y = 1;
-	v2.z = 0;*/
-
 	QUATERNION q2 = Vector3DToQuaternion(v2);
-
-	/*v3.x = 0;
-	v3.y = 0;
-	v3.z = 1;*/
 
 	QUATERNION q3 = Vector3DToQuaternion(v3);
 
@@ -97,21 +85,10 @@ void testQuaternionFromToVectors()
 	VECTOR3D v2{ 0, 1, 0 };
 	VECTOR3D v3{ 0, 0, 1 };
 
-	/*v1.x = 1;
-	v1.y = 0;
-	v1.z = 0;*/
-
 	QUATERNION q1 = Vector3DToQuaternion(v1);
 
-	/*v2.x = 0;
-	v2.y = 1;
-	v2.z = 0;*/
 
 	QUATERNION q2 = Vector3DToQuaternion(v2);
-
-	/*v3.x = 0;
-	v3.y = 0;
-	v3.z = 1;*/
 
 	QUATERNION q3 = Vector3DToQuaternion(v3);
 
@@ -163,10 +140,21 @@ int main(int argc, char **argv)
 	Funciones de test añadidas para comprobar que las funciones pedidas estan
 	implementadas correctamente
 	*/
-
-
 	test();
 
+
+	cout << "    Opciones disponibles" << endl << endl;
+	cout << "w: Avanzar" << endl;
+	cout << "a: Desplazarse a la Izquierda" << endl;
+	cout << "s: Retroceder" << endl;
+	cout << "d: Desplazarse a la Derecha" << endl;
+	cout << "t: Avanzar de manera rapida" << endl;
+	cout << "g: Retroceder de manera rapida" << endl;
+	cout << "h: Reiniciar la camara" << endl;
+	cout << "q: Salir" << endl;
+	cout << "Esc: Salir" << endl << endl << endl;
+
+	cout << "Para girar la camara, mover el raton mientras se pulsa alguno de los botones del raton" << endl;
 
 	glutMainLoop();
 	return(0);
@@ -237,11 +225,6 @@ void Display(void)
 	glViewport(0, 0, camera.screenwidth, camera.screenheight);
 
 	Render();
-
-	//cout << "Display: camera.direction.x: " << camera.direction.x << " camera.direction.y: " << camera.direction.y << " camera.direction.z: " << camera.direction.z << endl;
-	//cout << "Display: camera.position.x: " << camera.position.x << " camera.position.y: " << camera.position.y << " camera.position.z: " << camera.position.z << endl;
-	//cout << "Display: target.x: " << target.x << " target.y: " << target.y << " target.z: " << target.z << endl << endl;
-	//cout << "Euler: euler.yaw: " << rotacionEuler.yaw << " euler.pitch: " << rotacionEuler.pitch << " euler.roll: " << rotacionEuler.roll << endl << endl << endl;
 
 	glutSwapBuffers();
 }
@@ -413,50 +396,10 @@ void InitEuler()
 	rotacionEuler.orientation = { 1, 0, 0, 0 };
 }
 
-void testUnProject(int x, int y) {
-	GLdouble pos3D_x, pos3D_y, pos3D_z;
-
-	// arrays to hold matrix information
-
-	GLdouble model_view[16];
-	glGetDoublev(GL_MODELVIEW_MATRIX, model_view);
-
-	GLdouble projection[16];
-	glGetDoublev(GL_PROJECTION_MATRIX, projection);
-
-	GLint viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-
-	// get 3D coordinates based on window coordinates
-
-	gluUnProject(x, viewport[3] - y, NEAR_VALUE,
-		model_view, projection, viewport,
-		&pos3D_x, &pos3D_y, &pos3D_z);
-
-	VECTOR3D vectorClickNear{ pos3D_x, pos3D_y, pos3D_z };
 
 
-	gluUnProject(x, viewport[3] - y, FAR_VALUE,
-		model_view, projection, viewport,
-		&pos3D_x, &pos3D_y, &pos3D_z);
-
-	VECTOR3D vectorClickFar{ pos3D_x, pos3D_y, pos3D_z };
-
-
-	VECTOR3D forward = getForward(rotacionEuler);
-
-	VECTOR3D newVector{ pos3D_x, pos3D_y, pos3D_z };
-
-	for (int i = 0; i < 2; ++i)
-	{
-		newVector = Add(newVector, forward);
-	}
-
-
-}
-
-//Para controlar la cÃ¡mara tienes que obtener los cambios de posiciÃ³n del ratÃ³n y transformarlos
-//en ejes EULER (yaw y pitch). La cÃ¡mara debe mirar guiada por el ratÃ³n. Utiliza para ello las
+//Para controlar la camara tienes que obtener los cambios de posicion del raton y transformarlos
+//en ejes EULER (yaw y pitch). La camara debe mirar guiada por el raton. Utiliza para ello las
 //siguientes funciones de GLUT:
 void HandleMouseMotion(int x, int y)
 {
@@ -478,63 +421,17 @@ void HandleMouseMotion(int x, int y)
 		{
 			// Actualizar los angulos de rotacion en la estructura
 			updateEulerOrientation(rotacionEuler);
-
-
-			
-
-
-
-			/*// Variables declaradas para mejorar la legibilidad del codigo
-			// Contienen los nuevos vectores que hay que utilizar para actualizar la camara
-			//VECTOR3D eyePosition = RotateWithQuaternion(camera.position, rotacionEuler.orientation);
-
-			VECTOR3D eyePosition = RotateWithQuaternion(camera.position, QuaternionFromAngleAxis(rotacionEuler.yaw, {1, 0, 0}));
-			eyePosition = RotateWithQuaternion(eyePosition, QuaternionFromAngleAxis(rotacionEuler.pitch, {0, 1, 0}));
-			//eyePosition = RotateWithQuaternion(eyePosition, QuaternionFromAngleAxis(rotacionEuler.roll, {0, 0, 1}));
-
-			// No actualizar el vector target (camera.direction), si no siempre gira alrededor de ese punto
-			// en lugar de girar alrededor de la propia camara
-			//VECTOR3D target = RotateWithQuaternion(camera.direction, rotacionEuler.orientation);
-			//VECTOR3D target = RotateWithQuaternion(camera.direction, QuaternionFromAngleAxis(rotacionEuler.yaw, {1, 0, 0}));
-			//target = RotateWithQuaternion(target, QuaternionFromAngleAxis(rotacionEuler.pitch, {0, 1, 0}));
-
-			//VECTOR3D upVector = RotateWithQuaternion(camera.up, rotacionEuler.orientation);
-			VECTOR3D upVector = RotateWithQuaternion(camera.up, QuaternionFromAngleAxis(rotacionEuler.yaw, {1, 0, 0}));
-			upVector = RotateWithQuaternion(upVector, QuaternionFromAngleAxis(rotacionEuler.pitch, {0, 1, 0}));
-			//upVector = RotateWithQuaternion(upVector, QuaternionFromAngleAxis(rotacionEuler.roll, {0, 0, 1}));
-
-			//Hay que actualizar los parametros de la camara puesto que son estos los que se utilizan en
-			// la funcion Display (Marcada como funcion de pintado para OpenGL). Si se llamara a lookAt
-			// para actualizar la camara, la matriz generada se sobreescribiria en la siguiente llamada
-			// a display, puesto que display tambien llama a lookAt (pasando los vectores de la camara)
-			//camera.direction = target;
-			camera.position = eyePosition;
-			camera.up = upVector;*/
 		}
-
-		//cout << "camera.direction.x: " << camera.direction.x << " - camera.direction.y: " << camera.direction.y << " - camera.direction.z: " << camera.direction.z << endl;
-		//cout << "camera.position.x: " << camera.position.x << " - camera.position.y: " << camera.position.y << " - camera.position.z: " << camera.position.z << endl;
-		//cout << "rotacionEuler.pitch: " << rotacionEuler.pitch << " - rotacionEuler.yaw: " << rotacionEuler.yaw << " - rotacionEuler.z: " << rotacionEuler.roll << endl;
 	}
 
 	// Guardar las nuevas coordenadas del raton para utilizarlas en la siguiente llamada a la funcion
 	xPrev = x;
 	yPrev = y;
 
-	testUnProject(x, y);
-
 }
 
 void HandleMousePassiveMotion(int x, int y)
 {
-	//cout << "Pasive -> x: " << x << "\ty: " << y << endl;
-
-
 	xPrev = x;
 	yPrev = y;
-
-	// La funcionalidad de esta funcion es la misma que en la funcion HandleMouseMotion
-	// Por este motivo se llama directamente a la funcion
-	//HandleMouseMotion(x, y);
-	//glutPostRedisplay();
 }
