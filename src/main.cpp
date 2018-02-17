@@ -311,12 +311,23 @@ void HandleKeyboard(unsigned char key, int x, int y)
 		InitCamera(0);
 		break;
 
+
+	case 't':
+	case 'T':
+		forwardVector = MultiplyWithScalar(3, getForward(rotacionEuler));
+		camera.position = Add(camera.position, forwardVector);
+		break;
 	case 'w':
 	case 'W':
 		forwardVector = getForward(rotacionEuler);
 		camera.position = Add(camera.position, forwardVector);
 		break;
 
+	case 'g':
+	case 'G':
+		forwardVector = MultiplyWithScalar(-3, getForward(rotacionEuler));
+		camera.position = Add(camera.position, forwardVector);
+		break;
 	case 's':
 	case 'S':
 		forwardVector = MultiplyWithScalar(-1, getForward(rotacionEuler));

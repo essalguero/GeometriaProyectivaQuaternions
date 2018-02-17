@@ -161,6 +161,8 @@ void drawScene()
 
 void drawBuildings()
 {
+
+	// Edificios a la izquierda de la escena
 	drawBuilding({ -40, 10, -80 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -60, 10, -95 }, 20, 20, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -35, 15, -120 }, 30, 15, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
@@ -171,7 +173,13 @@ void drawBuildings()
 	drawBuilding({ -50, 14, -230 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 
 
+	drawBuilding({ -50, 20, -370 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ -42, 4, -400 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ -62, 8, -400 }, 8, 16, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	drawBuilding({ -50, 14, -430 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 
+
+	// Edificios a la derecha de la escena
 	drawBuilding({ 68, 16, -75 }, 32, 20, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 45, 10, -90 }, 20, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 25, 15, -120 }, 30, 15, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
@@ -194,18 +202,15 @@ void drawBuildings()
 
 
 
-	drawBuilding({ -50, 20, -370 }, 40, 30, 15, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -42, 4, -400 }, 8, 10, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -62, 8, -400 }, 8, 16, 16, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
-	drawBuilding({ -50, 14, -430 }, 28, 20, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
+	
 
-
+	// Edificio piramide en el centro
 	drawBuilding({ 0, 4, -530 }, 8, 40, 40, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 0, 12, -530 }, 8, 30, 30, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ 0, 20, -530 }, 8, 20, 20, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 
 
-
+	// Edificio escalonado
 	drawBuilding({ -50, 6, -270 }, 12, 40, 40, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -55, 18, -270 }, 12, 30, 40, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
 	drawBuilding({ -60, 30, -270 }, 12, 20, 40, { .5f, .9f, .5f }, { .9f, .5f, .9f }, { .1f, .1f, .1f });
